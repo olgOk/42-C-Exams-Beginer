@@ -37,15 +37,22 @@ $
 void        print_hex(int p)
 {
     char *str;
+    int tmp[127];
+    int i;
+
 
     str = "0123456789abcdef";
     if (p == 0)
         write (1, "0", 1);
+    i = 0;
     while (p)
     {
-        write(1, &str[p % 16], 1);
+        tmp[i] = str[p % 16];
+        i++;
         p /= 16;
     }
+    while (i >= 0)
+        write(1, &tmp[i--], 1);
 }
 
 int                ft_atoi(char *str)
@@ -62,9 +69,8 @@ int                ft_atoi(char *str)
     while (str[i] == '\t' || str[i] == '\v' || str[i] == '\n' || \
             str[i] == ' ' || str[i] == '\r' || str[i] == '\f')
         ++i;
-    if (str[i] == '-' || str[i] == '+')
-        if (str[i++] == '-')
-            sign *= -1;
+    if ((str[i] == '-' || str[i] == '+') && str[i++] == '-')
+        sign *= -1;
     while (str[i] && (str[i] >= '0' && '9' >= str[i]))
         nbr = (nbr * 10) + str[i++] - '0';
     return (nbr * sign);
